@@ -58,7 +58,7 @@ function Home() {
     <img
       src={bg6}
       alt="Hero"
-      className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+      className="w-full h-full object-cover object-center transition-transform duration-700"
     />
     
     {/* Overlay title (mobile & desktop) */}

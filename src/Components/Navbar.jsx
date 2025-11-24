@@ -1,8 +1,28 @@
 import { FiSearch, FiShoppingBag } from "react-icons/fi";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = ({ totalItems }) => {
+
+  const location = useLocation();
+
+   const isActive = (path) => {
+    if (path === "/") {
+      return location.pathname === "/";
+    }
+    return location.pathname.startsWith(path);
+  };
+
+  const links = [
+    { label: "Home", path: "/" },
+    { label: "Earrings", path: "/listing/earrings" },
+    { label: "Necklaces", path: "/listing/necklaces" },
+    { label: "Bracelets", path: "/listing/bracelets" },
+    { label: "Rings", path: "/listing/rings" },
+  ];
+
+
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white shadow-sm py-4 z-50">
+    <nav className="fixed top-0 left-0 w-full bg-[#F8F4EC]/80 backdrop-blur-sm border-b border-gray-200/40 py-5 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Row - Logo and Icons */}
@@ -14,7 +34,7 @@ const Navbar = ({ totalItems }) => {
           
           {/* Center - Logo */}
           <div className="text-center">
-            <h1 className="text-2xl font-serif font-medium text-gray-900">She and Jae</h1>
+            <h1 className="text-2xl font-serif font-medium text-gray-900 italic">She and Jae</h1>
           </div>
           
           {/* Right - Cart Icon */}
@@ -31,32 +51,26 @@ const Navbar = ({ totalItems }) => {
         {/* Bottom Row - Navigation Links */}
         <div className="mt-4 pt-2">
           <div className="flex justify-center space-x-6">
-            {/* Active item (Home) */}
-            <a href="#" className="relative group text-base font-serif text-gray-900">
-              Home
-              <span className="absolute left-0 bottom-0 h-0.5 bg-gray-900 w-full"></span>
-            </a>
-            
-            {/* Other items */}
-            <a href="#" className="relative group text-base font-serif text-gray-700 hover:text-gray-900">
-              Earrings
-              <span className="absolute left-0 bottom-0 h-0.5 bg-gray-900 transition-all duration-300 transform origin-left scale-x-0 group-hover:scale-x-100 w-full"></span>
-            </a>
-            
-            <a href="#" className="relative group text-base font-serif text-gray-700 hover:text-gray-900">
-              Necklaces
-              <span className="absolute left-0 bottom-0 h-0.5 bg-gray-900 transition-all duration-300 transform origin-left scale-x-0 group-hover:scale-x-100 w-full"></span>
-            </a>
-            
-            <a href="#" className="relative group text-base font-serif text-gray-700 hover:text-gray-900">
-              Bracelets
-              <span className="absolute left-0 bottom-0 h-0.5 bg-gray-900 transition-all duration-300 transform origin-left scale-x-0 group-hover:scale-x-100 w-full"></span>
-            </a>
-            
-            <a href="#" className="relative group text-base font-serif text-gray-700 hover:text-gray-900">
-              Rings
-              <span className="absolute left-0 bottom-0 h-0.5 bg-gray-900 transition-all duration-300 transform origin-left scale-x-0 group-hover:scale-x-100 w-full"></span>
-            </a>
+            {links.map((link) => (
+        <Link
+          key={link.path}
+          to={link.path}
+          className={`relative text-base font-serif ${
+            isActive(link.path)
+              ? "text-gray-900"
+              : "text-gray-700 hover:text-gray-900"
+          }`}
+        >
+          {link.label}
+
+          {/* Underline */}
+          <span
+            className={`absolute left-0 bottom-0 h-0.5 bg-gray-900 w-full transition-all duration-300 origin-left ${
+              isActive(link.path) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+            }`}
+          ></span>
+        </Link>
+      ))}
           </div>
         </div>
       </div>
