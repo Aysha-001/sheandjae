@@ -14,8 +14,7 @@ import { useCart } from '../context/CartContext';
 import  { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FiSearch, FiUser, FiShoppingBag, FiMail, FiInstagram} from 'react-icons/fi';// Update the path accordingly
-import TopNav from "../Components/TopNav";
-import BottomNav from "../Components/BottomNav";
+
 
 function Home() {
   const { totalItems } = useCart(); 
