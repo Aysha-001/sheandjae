@@ -8,6 +8,9 @@ import Navbar from './Components/Navbar';
 import Category from './pages/Category';
 import Item from './pages/Item';
 import ListingFetch from './pages/ListingFetch';
+import ItemFetch from './pages/ItemFecth';
+import ProductDetail from './pages/ProductDetail';
+import ListingUpdated from './pages/ListingUpdated';
 
 
 //import Navbar from './Components/Navbar';
@@ -25,7 +28,7 @@ function App() {
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
         
-          <Route path="/listing/:category/:id" element={<Item />} />
+          <Route path="/listing/:category/:id" element={<ProductDetail/>} />
         </Routes>
       </div>
 

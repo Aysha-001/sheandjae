@@ -5,15 +5,19 @@ import { FiChevronDown, FiX } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase"; // adjust path if needed
-
+import { filterAndSortProducts } from "../utils/filterAndSortProducts";
 
 
 const FILTER_OPTIONS = {
-  Material: ["Gold", "Silver", "Pearl", "Rose Gold"],
-  Color: ["White", "Black", "Pink", "Green"],
-  Occasion: ["Daily Wear", "Wedding", "Party", "Festive"],
-  Price: ["Under 999", "1000-1999", "2000-2999", "3000+"],
+  Material: ["gold", "Silver", "Pearl", "Rose Gold"],
+  Color: ["gold", "Black", "Pink", "Green"],
 };
+
+const SORT_OPTIONS = [
+                  { label: "New Arrivals", value: "new" },
+                  { label: "Price: Low → High", value: "priceLow" },
+                  { label: "Price: High → Low", value: "priceHigh" },
+                ]
 //------------------------------------------
 const fetchCategoryProducts = async (category) => {
   const q = query(
@@ -79,6 +83,12 @@ const ListingFetch = () => {
     });
   };
 
+  const filteredProducts = filterAndSortProducts(
+    products,
+    activeFilters,
+    sortValue
+  );
+
   // ------------ REMOVE A TAG ------------
   const removeTag = (filterType, value) => {
     toggleFilterValue(filterType, value);
@@ -119,76 +129,96 @@ const ListingFetch = () => {
       </h1>
 
       {/* DESKTOP FILTER + SORT (Now includes Mobile Toggle) */}
-      <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-6">
-        <div className="flex flex-wrap gap-4 w-full sm:w-auto">
-          
-          {/* MOBILE: Single Filter/Sort Button */}
-          <button
-            onClick={() => setIsMobileFilterOpen(true)}
-            className="sm:hidden w-full px-4 py-2 border rounded-full text-sm text-gray-700 flex items-center justify-center gap-2 bg-white shadow-sm"
-          >
-            Filter & Sort
-            <FiChevronDown className="w-4 h-4" />
-          </button>
-          
-          {/* DESKTOP: Filter Dropdown Buttons (Original Logic - hidden on mobile) */}
-          <div className="hidden sm:flex flex-wrap gap-4 w-full sm:w-auto">
-            {Object.keys(FILTER_OPTIONS).map((filterType) => (
-              <div key={filterType} className="relative">
-                <button
-                  onClick={() =>
-                    setOpenFilter(openFilter === filterType ? null : filterType)
-                  }
-                  className="px-4 py-2 border rounded-full text-sm text-gray-700 flex items-center gap-1"
-                >
-                  {filterType} <FiChevronDown />
-                </button>
+      
+<div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-6">
+  <div className="flex flex-wrap gap-4 w-full sm:w-auto">
 
-                {/* DROPDOWN */}
-                {openFilter === filterType && (
-                  <div className="absolute w-40 bg-white shadow-md rounded-xl mt-2 p-3 z-30 right-0 sm:left-0">
-                    {FILTER_OPTIONS[filterType].map((value) => {
-                      const isActive = activeFilters[filterType]?.includes(value);
+    {/* MOBILE BUTTON */}
+    <button
+      onClick={() => setIsMobileFilterOpen(true)}
+      className="sm:hidden w-full px-4 py-2 border rounded-full text-sm text-gray-700 flex items-center justify-center gap-2 bg-white shadow-sm"
+    >
+      Filter & Sort
+      <FiChevronDown className="w-4 h-4" />
+    </button>
 
-                      return (
-                        <div
-                          key={value}
-                          className={`px-2 py-1 rounded cursor-pointer text-sm mb-1
-                            ${
-                              isActive
-                                ? "bg-[#C8B7A6] text-gray-900"
-                                : "hover:bg-gray-100"
-                            }
-                          `}
-                          onClick={() => {
-                            toggleFilterValue(filterType, value);
-                            setOpenFilter(null); // Close filter dropdown on selection
-                          }}
-                        >
-                          {value}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+    {/* DESKTOP FILTERS */}
+    <div className="hidden sm:flex gap-4">
+
+      {/* COLOR FILTER */}
+      <div className="relative">
+        <button
+          onClick={() => setOpenFilter(openFilter === "Color" ? null : "Color")}
+          className="px-4 py-2 border rounded-full text-sm text-gray-700 flex items-center gap-1"
+        >
+          Color <FiChevronDown />
+        </button>
+
+        {openFilter === "Color" && (
+          <div className="absolute w-40 bg-white shadow-md rounded-xl mt-2 p-3 z-30">
+            {FILTER_OPTIONS.Color.map((color) => (
+              <div
+                key={color}
+                onClick={() => {
+                  toggleFilterValue("color", color.toLowerCase());
+                  setOpenFilter(null);
+                }}
+                className="px-2 py-1 rounded cursor-pointer text-sm hover:bg-gray-100"
+              >
+                {color}
               </div>
             ))}
-            
-            {/* SORT DROPDOWN (Desktop) */}
-            <select
-              className="border rounded-full px-4 py-2 text-sm text-gray-700 bg-white"
-              value={sortValue}
-              onChange={(e) => setSortValue(e.target.value)}
-            >
-              <option value="">Sort</option>
-              <option value="priceLow">Price: Low → High</option>
-              <option value="priceHigh">Price: High → Low</option>
-              <option value="popular">Popularity</option>
-              <option value="new">New Arrivals</option>
-            </select>
           </div>
-        </div>
+        )}
       </div>
+
+      {/* MATERIAL FILTER */}
+      <div className="relative">
+        <button
+          onClick={() =>
+            setOpenFilter(openFilter === "Material" ? null : "Material")
+          }
+          className="px-4 py-2 border rounded-full text-sm text-gray-700 flex items-center gap-1"
+        >
+          Material <FiChevronDown />
+        </button>
+
+        {openFilter === "Material" && (
+          <div className="absolute w-40 bg-white shadow-md rounded-xl mt-2 p-3 z-30">
+            {FILTER_OPTIONS.Color.map((material) => (
+              <div
+                key={material}
+                onClick={() => {
+                  toggleFilterValue("material", material.toLowerCase());
+                  setOpenFilter(null);
+                }}
+                className="px-2 py-1 rounded cursor-pointer text-sm hover:bg-gray-100"
+              >
+                {material}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* SORT (Desktop) */}
+      <div className="relative">
+        <select
+          className="border rounded-full px-4 py-2 text-sm text-gray-700 bg-white"
+          value={sortValue}
+          onChange={(e) => setSortValue(e.target.value)}
+        >
+          <option value="">Sort</option>
+          <option value="priceLow">Price: Low → High</option>
+          <option value="priceHigh">Price: High → Low</option>
+          <option value="new">New Arrivals</option>
+        </select>
+      </div>
+
+    
+    </div>
+  </div>
+</div>
 
       {/* --------------------- Filter Tags --------------------- */}
       {Object.keys(activeFilters).length > 0 && (
@@ -224,14 +254,14 @@ const ListingFetch = () => {
 
 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
   {/* Replace this with Firestore data */}
-  {products.map((product) => {
+  {filteredProducts.map((product) => {
     // Assuming 'p' acts as the unique product ID here for demonstration
    
 
     return (
             <Link
         key={product.id}
-        to={`/product/${product.id}`}
+        to={`/listing/${product.category}/${product.id}`}
         className="bg-white rounded-xl shadow-sm hover:shadow-md transition transform duration-300 hover:scale-[1.02] block"
         >
         <div className="relative w-full h-40 sm:h-52 bg-gray-100 rounded-t-xl overflow-hidden">
@@ -296,20 +326,32 @@ const ListingFetch = () => {
             ))}
             
             {/* Sort Section */}
+            {/* SORT (Mobile – Pill Style) */}
             <div className="mb-6">
               <h3 className="text-lg font-medium mb-3">Sort By</h3>
-              <select
-                className="border rounded-lg px-4 py-2 text-base text-gray-700 bg-white w-full"
-                value={sortValue}
-                onChange={(e) => setSortValue(e.target.value)}
-              >
-                <option value="">Default</option>
-                <option value="priceLow">Price: Low → High</option>
-                <option value="priceHigh">Price: High → Low</option>
-                <option value="popular">Popularity</option>
-                <option value="new">New Arrivals</option>
-              </select>
+
+              <div className="flex flex-wrap gap-2">
+                {SORT_OPTIONS.map((option) => {
+                  const isActive = sortValue === option.value;
+
+                  return (
+                    <span
+                      key={option.value}
+                      onClick={() => setSortValue(option.value)}
+                      className={`px-3 py-1 text-sm rounded-full cursor-pointer transition
+                        ${
+                          isActive
+                            ? "bg-[#C8B7A6] text-gray-900 border border-[#C8B7A6]"
+                            : "bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
+                        }`}
+                    >
+                      {option.label}
+                    </span>
+                  );
+                })}
+              </div>
             </div>
+
           </div>
           
           {/* Sticky Footer Button to Close */}
