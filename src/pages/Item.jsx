@@ -4,16 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { FiMinus, FiPlus, FiChevronDown } from "react-icons/fi"; // Added FiChevronDown
 
 const sampleProduct = {
-  id: "1",
-  name: "Solitaire Minimal Band",
-  price: 2599,
-  short: "Handcrafted simplicity — a timeless solitaire band for every occasion.",
-  materialOptions: ["Gold", "Silver", "Rose Gold"],
-  sku: "S-MIN-001",
-  description:
-    "A minimalist solitaire band made with ethically sourced materials. Subtle shine, comfortable fit. The design prioritizes comfort and durability for everyday wear, making it an ideal choice for a subtle statement piece.",
-  materials:
-    "Solid 14k gold / rhodium plated silver options. Clean with soft cloth. Avoid chemicals and abrasive cleaners. Store separately from other jewelry to prevent scratching.",
+  //details of product
 };
 
 // --- START: Accordion Component for Mobile Optimization ---
