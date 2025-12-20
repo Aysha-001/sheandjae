@@ -11,6 +11,7 @@ import ListingFetch from './pages/ListingFetch';
 import ItemFetch from './pages/ItemFecth';
 import ProductDetail from './pages/ProductDetail';
 import ListingUpdated from './pages/ListingUpdated';
+import About from './pages/About';
 
 
 //import Navbar from './Components/Navbar';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/cart" element={<Cart />} />
         
           <Route path="/listing/:category/:id" element={<ProductDetail/>} />
+          <Route path='/about' element={<About/>} />
         </Routes>
       </div>
 

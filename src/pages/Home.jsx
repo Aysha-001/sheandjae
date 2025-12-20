@@ -8,12 +8,14 @@ import earrings from '../assets/earrings.jpg';
 import bangles from '../assets/bangles4.jpg';
 import necklace from '../assets/necklace2.jpg';
 import bracelets from '../assets/bracelets3.jpg';
+import { Link } from "react-router-dom";
 
 import { useCart } from '../context/CartContext'; 
  //import { useSearch } from '../context/SearchContext';// Update path
 import  { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FiSearch, FiUser, FiShoppingBag, FiMail, FiInstagram} from 'react-icons/fi';// Update the path accordingly
+import { fetchNewArrivals } from '../queries/productQueries';
 
 
 function Home() {
@@ -21,6 +23,23 @@ function Home() {
    //const { searchTerm, searchResults, handleSearch } = useSearch();
  // const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
+  const [newArrivals, setNewArrivals] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+  const loadNewArrivals = async () => {
+    try {
+      const data = await fetchNewArrivals();
+      console.log("Fetched new arrivals:", data); 
+      setNewArrivals(data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadNewArrivals();
+}, []);
+
 
   /*useEffect(() => {
     const handleClickOutside = (e) => {
@@ -80,14 +99,12 @@ function Home() {
       a pause that draws attention to what matters."
     </p>
     
-    <div className="flex flex-col md:flex-row gap-3 md:gap-6">
+  
       <button className="text-sm tracking-widest border-b border-black pb-1 hover:text-amber-600 hover:border-amber-600 transition-all w-fit">
-        EXPLORE COLLECTION
+        Know more about us 
       </button>
-      <button className="text-sm tracking-widest text-gray-500 pb-1 hover:text-black transition-all w-fit">
-        OUR PROCESS →
-      </button>
-    </div>
+    
+    
   </div>
 </div>
 </div>
@@ -191,6 +208,72 @@ function Home() {
     </div>
   </div>
 </section>
+
+  {/* NEW ARRIVAL SECTION */}
+  {!loading && newArrivals.length > 0 && (
+<section className="py-20 bg-[#F6F4EF]">
+  <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+
+    {/* Section heading */}
+    <div className="text-center mb-12">
+      <h2 className="text-2xl md:text-3xl font-light tracking-wider text-stone-700">
+        NEW ARRIVALS
+      </h2>
+      <div className="w-16 h-px bg-stone-300 mx-auto mt-4 font-light">trending now</div>
+    </div>
+
+    {/* Products */}
+    {loading ? (
+      <p className="text-center text-sm text-stone-500">Loading...</p>
+    ) : (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+        {newArrivals.map((product) => (
+            <Link
+        key={product.id}
+        to={`/listing/${product.category}/${product.id}`}
+        className="bg-[#FAF8F4] rounded-xl border border-stone-200/60
+             hover:shadow-md transition transform duration-300 hover:scale-[1.02]
+             block font-serif"
+        >
+        <div className="relative w-full h-40 sm:h-52 bg-gray-100 rounded-t-xl overflow-hidden">
+            <img
+            src={product.images?.[0]}
+            alt={product.name}
+            className="w-full h-full object-cover object-center"
+            />
+        </div>
+
+        <div className="p-3 sm:p-4">
+            <h3 className="text-sm text-gray-900 truncate">
+            {product.name}
+            </h3>
+            <p className="text-xs text-gray-500 mt-1">
+            ₹{product.price}
+            </p>
+        </div>
+        </Link>
+
+
+        ))}
+      </div>
+    )}
+
+    {/* Subtle CTA */}
+    <div className="mt-12 text-center">
+      <Link
+        to="/listing/new"
+        className="inline-block text-xs tracking-widest text-stone-700 hover:text-amber-600 transition-all"
+      >
+        View all new pieces →
+      </Link>
+    </div>
+
+  </div>
+</section>
+)}
+
+
+
        <section className="relative overflow-hidden bg-stone-100 py-20">
   {/* Decorative elements */}
    <div className="absolute top-12 left-12 w-24 h-px bg-amber-500 hidden md:block"></div>
@@ -208,21 +291,21 @@ function Home() {
       </h1>
       <div className="border-t border-amber-200 pt-6 max-w-md">
         <p className="text-stone-600 mb-6 italic">
-          .............................................................................. 
-          blah blah blha blha blha
-          blah blah blha blha blha
-          blah blah blha blha blha
-          blah blah blha blha blha<br/>
+        
+
+
           <span className="font-semibold not-italic">..........</span>"
         </p>
-        <div className="flex space-x-6">
-          <button className="text-xs tracking-widest border-b border-stone-800 pb-1 hover:text-amber-600 hover:border-amber-600 transition-all">
-            DÉCOUVRIR →
-          </button>
-          <button className="text-xs tracking-widest text-stone-400 pb-1 hover:text-stone-600 transition-all">
-            NOTRE ATELIER
-          </button>
-        </div>
+       
+       <Link
+          to="/about"
+          className="inline-block text-sm tracking-widest text-stone-800 hover:text-amber-600 transition-all"
+        >
+          Read our Story →
+        </Link>
+
+        
+     
       </div>
     </div>
     

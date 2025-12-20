@@ -21,6 +21,7 @@ const Navbar = ({ totalItems }) => {
     { label: "Necklaces", path: "/listing/necklaces" },
     { label: "Bracelets", path: "/listing/bracelets" },
     { label: "Rings", path: "/listing/rings" },
+    {label: "About", path: "/about"}
   ];
 
 

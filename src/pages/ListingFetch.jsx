@@ -239,6 +239,19 @@ const ListingFetch = () => {
           )}
         </div>
       )}
+      {sortValue && (
+        <div className="flex flex-wrap gap-3 mb-6">
+          <span className="px-4 py-1 text-sm bg-gray-200 rounded-full flex items-center gap-2">
+            Sort: {
+              SORT_OPTIONS.find(opt => opt.value === sortValue)?.label
+            }
+            <FiX
+              className="cursor-pointer"
+              onClick={() => setSortValue("")}
+            />
+          </span>
+        </div>
+      )}
 
       {/* --------------------- Product Grid --------------------- */}
     
@@ -262,7 +275,7 @@ const ListingFetch = () => {
             <Link
         key={product.id}
         to={`/listing/${product.category}/${product.id}`}
-        className="bg-white rounded-xl shadow-sm hover:shadow-md transition transform duration-300 hover:scale-[1.02] block"
+        className="bg-white rounded-xl shadow-sm hover:shadow-md transition transform duration-300 hover:scale-[1.02] block font-serif"
         >
         <div className="relative w-full h-40 sm:h-52 bg-gray-100 rounded-t-xl overflow-hidden">
             <img
