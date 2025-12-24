@@ -1,52 +1,58 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 
 const CartContext = createContext();
 
-export function useCart() {
-  return useContext(CartContext);
-}
+export const CartProvider = ({ children }) => {
+  const [items, setItems] = useState([]);
 
-export function CartProvider({ children }) {
-  const [cart, setCart] = useState(() => {
-    // Get cart from localStorage if it exists
-    const storedCart = localStorage.getItem('cart');
-    return storedCart ? JSON.parse(storedCart) : [];
-  });
-
-  // Persist cart to localStorage on every change
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  function addToCart(product) {
-    setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
-        );
-      } else {
-        return [...prev, { ...product, qty: 1 }];
+  const addToCart = useCallback((product) => {
+    setItems(prevItems => {
+      // Check if product already exists in cart
+      const existingItem = prevItems.find(item => item.id === product.id);
+      if (existingItem) {
+        // If you want to prevent duplicates, return current state
+        // Or if you want to allow duplicates, just add it
+        return [...prevItems, product]; // Allows duplicates
       }
+      return [...prevItems, product];
     });
-  }
+  }, []);
 
-  function updateQty(id, delta) {
-    setCart(prev =>
-      prev
-        .map(item =>
-          item.id === id ? { ...item, qty: item.qty + delta } : item
-        )
-        .filter(item => item.qty > 0)
-    );
-  }
+  const removeFromCart = useCallback((id) => {
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
+  }, []);
 
-  const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+  const clearCart = useCallback(() => {
+    setItems([]);
+  }, []);
+
+  const getCartTotal = useCallback(() => {
+    return items.reduce((total, item) => total + item.price, 0);
+  }, [items]);
+
+  const getCartItemCount = useCallback(() => {
+    return items.length;
+  }, [items]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQty, totalItems, totalPrice }}>
+    <CartContext.Provider value={{
+      items,
+      addToCart,
+      removeFromCart,
+      clearCart,
+      getCartTotal,
+      getCartItemCount
+    }}>
       {children}
     </CartContext.Provider>
   );
-}
+};
+
+// Custom hook to use the cart
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};

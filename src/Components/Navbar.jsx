@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { FiSearch, FiShoppingBag, FiMenu, FiX} from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
+import { useCart } from '../context/CartContext';
 
-
-const Navbar = ({ totalItems }) => {
-
+const Navbar = () => {
+  const { getCartItemCount } = useCart();
+  
+  const totalItems = getCartItemCount();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -15,6 +17,7 @@ const Navbar = ({ totalItems }) => {
     return location.pathname.startsWith(path);
   };
 
+
   const links = [
     { label: "Home", path: "/" },
     { label: "Earrings", path: "/listing/earrings" },
@@ -24,6 +27,7 @@ const Navbar = ({ totalItems }) => {
     {label: "About", path: "/about"}
   ];
 
+ 
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#F8F4EC]/80 backdrop-blur-sm border-b border-gray-200/40 py-5 z-50">
@@ -56,12 +60,13 @@ const Navbar = ({ totalItems }) => {
           
           {/* Right - Cart Icon */}
           <div className="flex items-center space-x-4">
-            <button className="p-1 text-gray-700 hover:text-gray-900 relative">
+            <Link className="p-1 text-gray-700 hover:text-gray-900 relative"
+             to="/cart">
               <FiShoppingBag className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 bg-gray-900 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
                 {totalItems}
               </span>
-            </button>
+            </Link>
           </div>
         </div>
         

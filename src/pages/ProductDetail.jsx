@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
-
+import { useCart } from '../context/CartContext';
 
 
 import {
@@ -42,6 +42,9 @@ function Accordion({ title, children, defaultOpen = false }) {
 
 export default function ProductDetail() {
    const { id } = useParams();
+   const { items, addToCart } = useCart();
+
+
 
   /* ---- Fetch product ---- */
   const {
@@ -63,6 +66,17 @@ export default function ProductDetail() {
     enabled: !!mainTag,
   });
 
+  const isInCart = items.some(item => item.id === product.id);
+
+  const handleAddToCart = () => {
+    if (!isInCart) {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price
+    });
+  }
+  };
   /* ---- States ---- */
   if (isLoading) {
     return <p className="text-center py-20 text-gray-500">Loading product...</p>;
@@ -166,10 +180,15 @@ export default function ProductDetail() {
 
               {/* Add to cart button - Full width on mobile */}
               <button
-                // Added w-full for mobile
-                className="w-full rounded-full px-6 py-3 bg-gray-900 text-white text-base font-medium hover:opacity-95 transition-shadow shadow-md mt-2"
+                className={`w-full rounded-full px-6 py-3 text-base font-medium transition-all shadow-md mt-2 ${
+                  isInCart
+                    ? 'bg-[#BDB19C] text-white cursor-not-allowed'
+                    : 'bg-gray-900 text-white hover:opacity-95'
+                }`}
+                onClick={handleAddToCart}
+                disabled={isInCart}
               >
-                Add to Cart
+                {isInCart ? 'Already in Cart' : 'Add to Cart'}
               </button>
             </div>
             

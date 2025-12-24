@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 //import Listing from './pages/Listing';
 import Product from './pages/Product';
-import Cart from './pages/Cart';
+import CartCheckout from './pages/CartCheckout';
 import Navbar from './Components/Navbar';
 import Category from './pages/Category';
 import Item from './pages/Item';
@@ -19,7 +19,7 @@ import About from './pages/About';
 function App() {
   return (
     <Router>
-      <Navbar totalItems={0} />
+      <Navbar />
 
       {/* Push content below navbar height */}
      <div className="min-h-screen bg-stone-50 pt-20 md:pt-28">
@@ -27,7 +27,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/listing/:category" element={<ListingFetch />} />
           <Route path="/product/:id" element={<Product />} />
-          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart" element={<CartCheckout />} />
         
           <Route path="/listing/:category/:id" element={<ProductDetail/>} />
           <Route path='/about' element={<About/>} />

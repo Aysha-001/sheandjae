@@ -10,16 +10,20 @@ import necklace from '../assets/necklace2.jpg';
 import bracelets from '../assets/bracelets3.jpg';
 import { Link } from "react-router-dom";
 
-import { useCart } from '../context/CartContext'; 
  //import { useSearch } from '../context/SearchContext';// Update path
 import  { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FiSearch, FiUser, FiShoppingBag, FiMail, FiInstagram} from 'react-icons/fi';// Update the path accordingly
 import { fetchNewArrivals } from '../queries/productQueries';
 
+import { FiSearch, FiUser, FiShoppingBag, FiMail, FiInstagram} from 'react-icons/fi';
+
+// Update the path accordingly
+
+
 
 function Home() {
-  const { totalItems } = useCart(); 
+
    //const { searchTerm, searchResults, handleSearch } = useSearch();
  // const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
