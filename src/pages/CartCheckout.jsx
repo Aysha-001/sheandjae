@@ -1,11 +1,12 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import {placeOrderToDB} from '../queries/orders'
 
 const CartCheckout = () => {
   const { items, removeFromCart, clearCart, getCartTotal } = useCart();
 
-  const handlePlaceOrder = (e) => {
+  const handlePlaceOrder = async(e) => {
     e.preventDefault();
     if (items.length === 0) return;
 
@@ -25,9 +26,15 @@ const CartCheckout = () => {
       date: new Date().toISOString()
     };
 
-    console.log('Placing order:', orderData);
-    alert(`Order placed successfully!\nTotal: $${getCartTotal().toFixed(2)}`);
+    try {
+    const orderDocId = await placeOrderToDB(orderData);
+    
     clearCart();
+    navigate("/thank-you", { state: { orderDocId } });
+  } catch (error) {
+    console.error("Order failed:", error);
+    
+    }
   };
 
   return (
@@ -80,35 +87,30 @@ const CartCheckout = () => {
                   Items in Cart <span className="text-gray-500">({items.length})</span>
                 </h2>
                 
-                <div className="space-y-6">
-                  {items.map((item, index) => (
-                    <div 
-                      key={`${item.id}-${index}`}
-                      className="flex items-center justify-between py-4 border-b border-gray-50 last:border-0"
-                    >
-                      <div className="flex-1">
-                        <h3 className="font-light text-gray-900 text-lg mb-1">
-                          {item.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">ID: {item.id}</p>
+                {/* Cart Items */}
+                  <div className="space-y-4">
+                    {items.map((item, index) => (
+                      <div
+                        key={`${item.id}-${index}`}
+                        className="flex justify-between items-center py-4 border-b border-gray-100"
+                      >
+                        <div className="flex-1">
+                          <p className="text-gray-900">{item.name}</p>
+                        </div>
+                        
+                        <div className="flex items-center gap-6">
+                          <p className="text-gray-900">${item.price.toFixed(2)}</p>
+                          <button
+                            type="button"
+                            onClick={() => removeFromCart(item.id)}
+                            className="text-gray-400 hover:text-gray-600 text-sm"
+                          >
+                            ✕
+                          </button>
+                        </div>
                       </div>
-                      
-                      <div className="flex items-center gap-8">
-                        <span className="text-gray-900 font-light">
-                          ${item.price.toFixed(2)}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => removeFromCart(item.id)}
-                          className="text-gray-400 hover:text-gray-600 transition-colors duration-200 text-sm"
-                          title="Remove item"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
               </div>
 
               {/* Contact Information Form */}
@@ -238,7 +240,7 @@ const CartCheckout = () => {
                   </button>
 
                   <Link 
-                    to="/products"
+                    to="/"
                     className="block text-center py-3 text-gray-500 hover:text-gray-700 transition-colors duration-200 text-sm border-t border-gray-50 pt-4"
                   >
                     Continue Shopping

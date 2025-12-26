@@ -12,6 +12,7 @@ import ItemFetch from './pages/ItemFecth';
 import ProductDetail from './pages/ProductDetail';
 import ListingUpdated from './pages/ListingUpdated';
 import About from './pages/About';
+import ThankYou from './pages/Thankyou';
 
 
 //import Navbar from './Components/Navbar';
@@ -31,6 +32,7 @@ function App() {
         
           <Route path="/listing/:category/:id" element={<ProductDetail/>} />
           <Route path='/about' element={<About/>} />
+          <Route path='/thankyou' element={<ThankYou/>} />
         </Routes>
       </div>
 
