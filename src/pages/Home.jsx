@@ -13,10 +13,10 @@ import { Link } from "react-router-dom";
  //import { useSearch } from '../context/SearchContext';// Update path
 import  { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { FiSearch, FiUser, FiShoppingBag, FiMail, FiInstagram} from 'react-icons/fi';// Update the path accordingly
+
 import { fetchNewArrivals } from '../queries/productQueries';
 
-import { FiSearch, FiUser, FiShoppingBag, FiMail, FiInstagram} from 'react-icons/fi';
+import { FiMail, FiInstagram} from 'react-icons/fi';
 
 // Update the path accordingly
 
