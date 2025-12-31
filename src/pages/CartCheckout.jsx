@@ -1,10 +1,11 @@
 
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import {placeOrderToDB} from '../queries/orders'
 
 const CartCheckout = () => {
   const { items, removeFromCart, clearCart, getCartTotal } = useCart();
+  const navigate = useNavigate();
 
   const handlePlaceOrder = async(e) => {
     e.preventDefault();
@@ -22,15 +23,16 @@ const CartCheckout = () => {
       })),
       total: getCartTotal(),
       contact: contactInfo,
-      orderId: `ORD-${Date.now()}`,
-      date: new Date().toISOString()
+      order_id: `ORD-${Date.now()}`
     };
 
     try {
     const orderDocId = await placeOrderToDB(orderData);
-    
+    //console.log(orderData);
+    //const orderDocId = "ORD-123FRE45";
+
     clearCart();
-    navigate("/thank-you", { state: { orderDocId } });
+    navigate("/thankyou", { state: { orderDocId } });
   } catch (error) {
     console.error("Order failed:", error);
     
@@ -127,7 +129,7 @@ const CartCheckout = () => {
                       </label>
                       <input
                         type="text"
-                        name="firstName"
+                        name="first_name"
                         required
                         className="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-gray-400 transition-colors duration-200"
                         placeholder="John"
@@ -140,7 +142,7 @@ const CartCheckout = () => {
                       </label>
                       <input
                         type="text"
-                        name="lastName"
+                        name="last_name"
                         required
                         className="w-full px-4 py-3 border border-gray-200 rounded focus:outline-none focus:border-gray-400 transition-colors duration-200"
                         placeholder="Doe"

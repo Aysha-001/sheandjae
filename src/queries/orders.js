@@ -6,7 +6,7 @@ export const placeOrderToDB = async (orderData) => {
   const docRef = await addDoc(orderRef, {
     ...orderData,
     status: "pending",
-    createdAt: serverTimestamp(),
+    created_at: serverTimestamp(),
   });
   return docRef.id;
 };

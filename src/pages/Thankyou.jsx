@@ -12,7 +12,7 @@ const ThankYou = () => {
       {/* Content */}
       <div className="text-center pt-8">
         {/* Simple Checkmark */}
-        <div className="text-green-600 mb-6">
+        <div className="text-[#BDB19C] mb-6">
           <svg 
             className="w-16 h-16 mx-auto" 
             fill="none" 
@@ -51,7 +51,7 @@ const ThankYou = () => {
         {/* Continue Button */}
         <div className="space-y-3">
           <Link
-            to="/home"
+            to="/"
             className="inline-block px-8 py-3 border border-gray-900 text-gray-900 hover:bg-gray-50 transition-colors duration-200"
           >
             Back to Store
