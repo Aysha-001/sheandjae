@@ -28,7 +28,6 @@ const fetchCategoryProducts = async (category) => {
 
   const snapshot = await getDocs(q);
 
-  console.log(snapshot)
 
   return snapshot.docs.map((doc) => ({
     id: doc.id,
@@ -265,10 +264,16 @@ const ListingFetch = () => {
   </p>
 )}
 
+{!isLoading && !isError && products.length === 0 && (
+  <div className="text-center py-12">
+    <p className="text-gray-500 text-lg">No products yet.</p>
+    <p className="text-gray-400 mt-2">Check back soon for new arrivals!</p>
+  </div>
+)}
+
 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-  {/* Replace this with Firestore data */}
+ 
   {filteredProducts.map((product) => {
-    // Assuming 'p' acts as the unique product ID here for demonstration
    
 
     return (
