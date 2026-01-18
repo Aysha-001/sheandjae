@@ -15,27 +15,28 @@ import About from './pages/About';
 import ThankYou from './pages/Thankyou';
 
 
+
+
 //import Navbar from './Components/Navbar';
 
 function App() {
+  
   return (
     <Router>
       <Navbar />
 
       {/* Push content below navbar height */}
-     <div className="min-h-screen bg-stone-50 pt-20 md:pt-28">
+    <div className="min-h-screen">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/listing/:category" element={<ListingFetch />} />
-          <Route path="/product/:id" element={<Product />} />
-          <Route path="/cart" element={<CartCheckout />} />
-        
-          <Route path="/listing/:category/:id" element={<ProductDetail/>} />
-          <Route path='/about' element={<About/>} />
-          <Route path='/thankyou' element={<ThankYou/>} />
+          <Route path="/" element={<div className="md:pt-28"><Home /></div>} />
+          <Route path="/listing/:category" element={<div className="pt-20 md:pt-28 bg-stone-50"><ListingFetch /></div>} />
+          <Route path="/product/:id" element={<div className="pt-20 md:pt-28 bg-stone-50"><Product /></div>} />
+          <Route path="/cart" element={<div className="pt-20 md:pt-28"><CartCheckout /></div>} />
+          <Route path="/listing/:category/:id" element={<div className="pt-20 md:pt-28 bg-stone-50"><ProductDetail /></div>} />
+          <Route path='/about' element={<div className="pt-20 md:pt-28"><About /></div>} />
+          <Route path='/thankyou' element={<div className="pt-20 md:pt-28"><ThankYou /></div>} />
         </Routes>
       </div>
-
     </Router>
   );
 }
